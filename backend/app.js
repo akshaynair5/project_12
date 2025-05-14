@@ -14,8 +14,10 @@ app.use(cors({
     credentials: true
 }))
 
-import authRouter from './routes/auth.routes.js'
-import userRouter from './routes/user.routes.js'
+import authRouter from './src/routes/auth.routes.js'
+import userRouter from './src//routes/user.routes.js'
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', userRouter)
+
+export { app }
