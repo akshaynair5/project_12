@@ -1,4 +1,3 @@
-import { refreshToken } from "firebase-admin/app";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({

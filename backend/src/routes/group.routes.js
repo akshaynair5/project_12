@@ -1,0 +1,35 @@
+import { Router } from 'express';
+import {
+  createGroup,
+  getGroupById,
+  updateGroupById,
+  deleteGroupById,
+  listGroupsByMemberId,
+  listGroupMembers
+} from '../controllers/group.controller.js';
+import { verifyJWT } from '../middlewares/auth.middleware.js';
+
+const router = Router();
+
+// Middleware to verify JWT token
+router.use(verifyJWT);
+
+// Create a new group
+router.post('/', createGroup);
+
+// Get group info/details
+router.get('/:id', getGroupById);
+
+// Update group settings (name, description)
+router.patch('/:id', updateGroupById);
+
+// Delete group
+router.delete('/:id', deleteGroupById);
+
+// List groups for a user (by membership)
+router.get('/', listGroupsByMemberId);
+
+// List members of a specific group
+router.get('/:id/members', listGroupMembers);
+
+export default router;
