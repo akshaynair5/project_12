@@ -32,5 +32,9 @@ const searchUsers = asyncHandler(async (req, res) => {
 
 })
 
-export { getUserById, updateUserById, deleteUserById, getUserConnections, getUserGroups, getIncomingRequests, getOutgoingRequests, searchUsers };
+const changeProfilePicture = asyncHandler(async (req, res) => {
+
+})
+
+export { getUserById, updateUserById, deleteUserById, getUserConnections, getUserGroups, getIncomingRequests, getOutgoingRequests, searchUsers, changeProfilePicture};
 

@@ -7,7 +7,8 @@ import {
   getUserGroups,
   getIncomingRequests,
   getOutgoingRequests,
-  searchUsers
+  searchUsers,
+  changeProfilePicture
 } from '../controllers/user.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
@@ -17,19 +18,21 @@ const router = Router();
 router.use(verifyJWT)
 
 // User Profile Routes
-router.get('/users/:id', getUserById);
-router.patch('/users/:id', updateUserById);
-router.delete('/users/:id', deleteUserById);
+router.get('/:id', getUserById);
+router.patch('/:id', updateUserById);
+router.delete('/:id', deleteUserById);
 
 // User Relationships
-router.get('/users/:id/connections', getUserConnections);
-router.get('/users/:id/groups', getUserGroups);
+router.get('/:id/connections', getUserConnections);
+router.get('/:id/groups', getUserGroups);
 
 // Connection Requests
-router.get('/users/:id/requests/incoming', getIncomingRequests);
-router.get('/users/:id/requests/outgoing', getOutgoingRequests);
+router.get('/:id/requests/incoming', getIncomingRequests);
+router.get('/:id/requests/outgoing', getOutgoingRequests);
 
 // User Search
-router.get('/users/search', searchUsers);
+router.get('/search', searchUsers);
+
+router.post('/change-profile-picture', changeProfilePicture);
 
 export default router;

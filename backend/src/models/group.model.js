@@ -10,7 +10,8 @@ const groupSchema = new mongoose.Schema({
         type: String,
         timestamp: Date
     },
-    lastUpdated: { type: Date, default: Date.now }
+    lastUpdated: { type: Date, default: Date.now },
+    groupPicture: { type: String },
 }, { timestamps: true });
 
 export const Group = mongoose.model("Group", groupSchema);

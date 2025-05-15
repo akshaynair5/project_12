@@ -5,7 +5,8 @@ import {
   updateGroupById,
   deleteGroupById,
   listGroupsByMemberId,
-  listGroupMembers
+  listGroupMembers,
+  updateGroupCover
 } from '../controllers/group.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
@@ -22,6 +23,9 @@ router.get('/:id', getGroupById);
 
 // Update group settings (name, description)
 router.patch('/:id', updateGroupById);
+
+// Update group profile picture
+router.patch('/:id/cover',upload.single("coverImage"), updateGroupCover);
 
 // Delete group
 router.delete('/:id', deleteGroupById);
