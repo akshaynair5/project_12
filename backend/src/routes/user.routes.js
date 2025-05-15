@@ -11,6 +11,7 @@ import {
   changeProfilePicture
 } from '../controllers/user.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
+import { upload } from '../middlewares/multer.middleware.js';
 
 const router = Router();
 
@@ -32,7 +33,6 @@ router.get('/:id/requests/outgoing', getOutgoingRequests);
 
 // User Search
 router.get('/search', searchUsers);
-
-router.post('/change-profile-picture', changeProfilePicture);
+router.post('/change-profile-picture', upload.single('profilePicture') , changeProfilePicture);
 
 export default router;

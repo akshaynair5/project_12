@@ -1,12 +1,12 @@
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { OAuth2Client } from "google-auth-library";
-import { User } from "../models/userModel.js";
+import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-register = asyncHandler(async (req, res) => {
+const register = asyncHandler(async (req, res) => {
     const { credential } = req.body; // the ID token from Google
 
     if (!credential) {

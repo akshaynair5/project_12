@@ -9,6 +9,7 @@ import {
   updateGroupCover
 } from '../controllers/group.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
+import { upload } from '../middlewares/multer.middleware.js';
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.get('/:id', getGroupById);
 router.patch('/:id', updateGroupById);
 
 // Update group profile picture
-router.patch('/:id/cover',upload.single("coverImage"), updateGroupCover);
+router.patch('/:id/cover', upload.single("coverImage"), updateGroupCover);
 
 // Delete group
 router.delete('/:id', deleteGroupById);
