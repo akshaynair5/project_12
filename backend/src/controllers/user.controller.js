@@ -207,8 +207,18 @@ const getOutgoingRequests = asyncHandler(async (req, res) => {
 })
 
 const searchUsers = asyncHandler(async (req, res) => {
+    const {query} = req.query;
+    const users = await User.find({fullname: {$regex: query, $options: 'i'} },{username: {$regex: query, $options: 'i'}}).select("_id fullname username profilePicture");
+    const formattedUsers = users.map(user => ({
+        userId: user._id,
+        fullname: user.fullname,
+        username: user.username
 
-})
+}));
+    res.status(200).json({users: formattedUsers});
+    
+
+});
 
 const changeProfilePicture = asyncHandler(async (req, res) => {
 
