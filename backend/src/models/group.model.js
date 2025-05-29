@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 const groupSchema = new mongoose.Schema({
-    firebaseGroupId: { type: String, required: true },
     name: { type: String, required: true },
     lastOrDefaultMessage: {
-        messageId: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
-        senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        text: String,
-        type: String,
-        timestamp: Date
+        messageId: { type: mongoose.Schema.Types.ObjectId, ref: "Message", default: null },
+        senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+        text: { type: String, default: "" },
+        type: { type: String, default: "text" },
+        timestamp: { type: Date, default: Date.now }
     },
     lastUpdated: { type: Date, default: Date.now },
-    groupPicture: { type: String },
+    groupPicture: { type: String, default: "" },
 }, { timestamps: true });
+
 
 export const Group = mongoose.model("Group", groupSchema);

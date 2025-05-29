@@ -17,7 +17,7 @@ const router = Router();
 router.use(verifyJWT);
 
 // Create a new group
-router.post('/', createGroup);
+router.post('/', upload.single("coverImage"), createGroup);
 
 // Get group info/details
 router.get('/:id', getGroupById);
