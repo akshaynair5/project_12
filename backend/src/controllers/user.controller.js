@@ -1,8 +1,8 @@
 import { User } from "../models/user.model.js";
-import { Connection } from "../models/Connection.model.js";
+import { Connection } from "../models/connection.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiResponse } from "../utils/apiResponse.js";
-import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import ApiError from "../utils/ApiError.js";
 import { ConnectionRequest } from "../models/connectionRequest.model.js";
 
 const getUserById = asyncHandler(async (req, res) => {
@@ -211,7 +211,7 @@ const searchUsers = asyncHandler(async (req, res) => {
 })
 
 const changeProfilePicture = asyncHandler(async (req, res) => {
-
+    
 })
 
 export { getUserById, updateUserById, deleteUserById, getUserConnections, getUserGroups, getIncomingRequests, getOutgoingRequests, searchUsers, changeProfilePicture};
