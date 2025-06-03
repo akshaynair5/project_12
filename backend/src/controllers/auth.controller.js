@@ -3,11 +3,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import uploadToCloudinary from "../utils/fileUpload.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const register = asyncHandler(async (req, res) => {
     const { credential } = req.body; // the ID token from Google
+    const avatarLocalPath = req.files?.avatar[0]?.path  
 
     if (!credential) {
         return res.status(400).json({ message: "No credential provided" });
@@ -21,10 +23,15 @@ const register = asyncHandler(async (req, res) => {
 
     const payload = ticket.getPayload();
 
-    const { email, sub: googleId, name: fullName, picture: profilePicture } = payload;
+    const { email, sub: googleId, name: fullName } = payload;
 
     if (!email || !googleId || !fullName) {
         return res.status(400).json({ message: "Invalid Google credentials" });
+    }
+    let avatar = null;
+
+    if(avatarLocalPath){
+        avatar = await uploadToCloudinary(avatarLocalPath);
     }
 
     // Try to find user
@@ -37,7 +44,7 @@ const register = asyncHandler(async (req, res) => {
             email,
             username,
             fullName,
-            profilePicture,
+            profilePicture: avatar?.url || null,
             googleId,
         });
     }

@@ -7,16 +7,21 @@ import { createMembership } from "./membership.controller.js";
 
 const createGroup = asyncHandler(async (req, res) => {
     const { name, description } = req.body;
-    const coverImage = req.file ? req.file.path : null;
+    const coverImageLocalPath = req.files.coverImage[0].path || "";
     const memberIds = req.body.memberIds;
 
     if (!name || !description) {
         throw new ApiError("Name and description are required fields", 400);
     }
+    let coverImage = null;
+    if(coverImage){
+        coverImage = await uploadToCloudinary(coverImageLocalPath);
+    }
 
     const groupDoc = await Group.create({
         name,
         description,
+        coverImage: coverImage?.url
     })
 
     if(!groupDoc){
@@ -123,7 +128,33 @@ const updateGroupById = asyncHandler(async (req, res) => {
 })
 
 const updateGroupCover = asyncHandler(async (req, res) => {
+    const groupId = req.params.id;
+    const coverImageLocalPath = req.files.coverImage[0].path || "";
+    if (!groupId) {
+        throw new ApiError("Group ID is required", 400);
+    }
 
+    const groupDoc = await Group.find({ _id: groupId })
+    if (!groupDoc) {
+        throw new ApiError("Group not found", 404);
+    }
+
+    const currentCoverImage = groupDoc.coverImage;
+    const coverImage = await uploadToCloudinary(coverImageLocalPath);
+
+
+    if (!coverImage) {
+        throw new ApiError("Failed to upload cover image", 500);
+    }
+
+    groupDoc.coverImage = coverImage.url;
+    await groupDoc.save();
+
+    if (currentCoverImage) {
+        await deleteFromCloudinary(currentCoverImage);
+    }
+
+    res.status(200).json(new ApiResponse(200, groupDoc, "Group cover updated successfully."));
 })
 
 const deleteGroupById = asyncHandler(async (req, res) => {
@@ -140,6 +171,10 @@ const deleteGroupById = asyncHandler(async (req, res) => {
     }
 
     const groupDoc = await Group.findByIdAndDelete(groupId);
+
+    if(groupDoc.coverImage) {
+        await deleteFromCloudinary(groupDoc.coverImage);
+    }
 
     if (!groupDoc) {
         throw new ApiError("Group not found", 404);

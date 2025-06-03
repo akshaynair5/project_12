@@ -4,6 +4,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { ConnectionRequest } from "../models/connectionRequest.model.js";
+import uploadToCloudinary from "../utils/fileUpload.js";
+import deleteFromCloudinary from "../utils/fileDelete.js";
 
 const getUserById = asyncHandler(async (req, res) => {
     const userId = req.user._id;
@@ -221,7 +223,29 @@ const searchUsers = asyncHandler(async (req, res) => {
 });
 
 const changeProfilePicture = asyncHandler(async (req, res) => {
-    
+    const userId = req.user._id;
+    const avatarLocalPath = req.file.avatar[0].path;
+
+    if(!avatarLocalPath){
+        throw new ApiError(400, "No profile picture uploaded");
+    }
+
+    const user = await User.findById(userId);
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
+
+    const avatar = await uploadToCloudinary(avatarLocalPath);
+    const prevAvatar = user.profilePicture;
+
+    user.profilePicture = avatar.url;
+    await user.save();
+
+    if(prevAvatar){
+        await deleteFromCloudinary(prevAvatar);
+    }
+
+    res.status(200).json(new ApiResponse(200, "Profile picture updated successfully", user));
 })
 
 export { getUserById, updateUserById, deleteUserById, getUserConnections, getUserGroups, getIncomingRequests, getOutgoingRequests, searchUsers, changeProfilePicture};
